@@ -1,24 +1,41 @@
 # Smash 💥
 
-Smash is a background Windows utility that listens to your laptop's internal microphone and detects when you physically strike or slap the laptop chassis, playing a customized audio reaction while completely ignoring human speech and background noise.
+Smash is a Windows tray utility that listens to the default microphone for short, loud impacts and plays a sound from the selected folder. Detection uses a 31-tap high-pass FIR filter, a recent quiet-window check, and a 750 ms cooldown. Results depend on your microphone, room noise, and sensitivity settings; speech and typing may still trigger it.
 
 ## Features
-- **Intelligent DSP Filtering:** Uses a 3000Hz High-Pass Filter and rolling amplitude envelopes to specifically isolate structure-borne noise (slaps) from airborne noise (talking).
-- **Multiple Modes:** Pain Mode, Sexy Mode, Halo Mode, and Custom Mode.
-- **System Tray Integration:** Runs silently in the background with a clean right-click menu near your clock.
-- **Interruption Playback:** Hitting the laptop rapidly will instantly interrupt the previous sound so it doesn't become a messy overlapping echo.
 
-## How to Install and Run
-1. Ensure Python is installed on your system.
-2. Place your sound files (`.mp3`, `.wav`) in the `assets/pain/`, `assets/sexy/`, `assets/halo/`, or `assets/custom/` folders.
-3. Place an icon for the system tray as `assets/icon.png`.
-4. Double click `build.bat` to compile this project into a standalone executable.
-5. Run `scripts/install.bat` as Administrator to automatically start the app silently every time Windows boots.
-6. Or else you can run 'Smash.exe' to manually start the app everytime.
+- Four selectable sound folders: Pain, Sexy, Halo, and Custom.
+- Tray menu to switch modes, pause listening, and quit.
+- New reactions replace audio playing on the dedicated mixer channel.
+- Runs locally; the current code does not send microphone audio to a server.
 
-## Adjusting Sensitivity
-If you find that the app triggers when typing, or fails to trigger when slapped, you can adjust the DSP thresholds in `src/audio_listener.py`:
-- `PEAK_THRESHOLD`: How loud the slap must be. Increase this number (e.g. to 20000) if typing triggers it. Decrease it if you have to hit the laptop too hard.
-- `QUIET_THRESHOLD`: The baseline background volume. The app ensures it was "quiet" before the slap.
+## Requirements
 
-Enjoy!
+- Windows and Python with `py` available.
+- A working default microphone and audio output.
+- Dependencies listed in `requirements.txt`.
+
+## Run from source
+
+1. Clone this repository and open a terminal in its root.
+2. Run `py -m pip install -r requirements.txt`.
+3. Add your own licensed `.mp3`, `.wav`, or `.ogg` files to `assets/pain/`, `assets/sexy/`, `assets/halo/`, or `assets/custom/`. Empty folders produce no sound.
+4. Run `py src/main.py`. Use the tray icon to switch modes or quit.
+
+The app looks for `assets/icon.png` or `assets/icon.ico`; if neither exists, it draws a default red icon.
+
+## Build a Windows executable
+
+Run `build.bat` from the repository root. It installs PyInstaller and builds `Smash.exe` beside the script. Keep your `assets` folders beside the executable. To start it on login, run `scripts/install.bat`; this adds an entry under your **current user's** Windows Run key. `scripts/uninstall.bat` removes that entry and stops the process. Administrator access is not required for this per-user startup entry.
+
+## Sensitivity and limitations
+
+Edit `PEAK_THRESHOLD` and `QUIET_THRESHOLD` in `src/audio_listener.py` before building. A larger peak threshold makes triggering harder. Detection is heuristic, not a reliable distinction between a chassis impact and other loud sounds. The current implementation logs start and trigger events to `smash_debug.log` and may remain in the tray if microphone initialization fails; check that log if no reactions play. Avoid striking hardware hard enough to damage it.
+
+## Contributing
+
+Please open an issue with your Windows version, microphone type, reproduction steps, and relevant error text (remove any personal information first). Pull requests should explain the change and how it was tested. Linux support has been requested but is not implemented.
+
+## Media and licensing
+
+The repository currently contains bundled audio clips whose redistribution rights have not been verified. **Do not assume the audio assets are available under a software license.** A code-only distribution with user-supplied or expressly licensed sounds is being prepared. Do not redistribute the bundled clips as part of a release without confirming their rights.
