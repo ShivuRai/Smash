@@ -19,7 +19,7 @@ Smash is a Windows tray utility that listens to the default microphone for short
 
 1. Clone this repository and open a terminal in its root.
 2. Run `py -m pip install -r requirements.txt`.
-3. Add your own licensed `.mp3`, `.wav`, or `.ogg` files to `assets/pain/`, `assets/sexy/`, `assets/halo/`, or `assets/custom/`. Empty folders produce no sound.
+3. The repository includes example sounds; you can also add your own `.mp3`, `.wav`, or `.ogg` files to `assets/pain/`, `assets/sexy/`, `assets/halo/`, or `assets/custom/`. A mode with no sounds produces no reaction.
 4. Run `py src/main.py`. Use the tray icon to switch modes or quit.
 
 The app looks for `assets/icon.png` or `assets/icon.ico`; if neither exists, it draws a default red icon.
@@ -38,4 +38,4 @@ Please open an issue with your Windows version, microphone type, reproduction st
 
 ## Media and licensing
 
-The repository currently contains bundled audio clips whose redistribution rights have not been verified. **Do not assume the audio assets are available under a software license.** A code-only distribution with user-supplied or expressly licensed sounds is being prepared. Do not redistribute the bundled clips as part of a release without confirming their rights.
+The MIT license covers the original source code and documentation. Bundled audio remains in this repository, but its individual sources and redistribution terms have not been documented. Do not assume those audio files are covered by MIT; verify their terms before reusing or repackaging them.
